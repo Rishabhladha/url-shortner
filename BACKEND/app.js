@@ -4,6 +4,7 @@ import express from "express";
 import {nanoid} from "nanoid";
 import connectDB from "./src/config/monogo.config.js";
 import short_url from "./src/routes/short_url.route.js";
+import url_routes from "./src/routes/url.routes.js";
 import user_routes from "./src/routes/user.routes.js";
 import auth_routes from "./src/routes/auth.routes.js";
 import { redirectFromShortUrl } from "./src/controller/short_url.controller.js";
@@ -28,6 +29,7 @@ app.use(attachUser)
 app.use("/api/user",user_routes)
 app.use("/api/auth",auth_routes)
 app.use("/api/create",short_url)
+app.use("/api/url",url_routes)
 app.get("/:id",redirectFromShortUrl)
 
 app.use(errorHandler)

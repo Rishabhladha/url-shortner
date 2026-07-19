@@ -49,19 +49,29 @@ const Navbar = () => {
               <>
                 <Link
                   to="/dashboard"
-                  className="text-xs font-semibold text-slate-300 hover:text-emerald-400 transition-colors px-3 py-1.5 rounded-lg hover:bg-slate-800/50 flex items-center gap-1.5"
+                  className="text-xs font-semibold text-slate-300 hover:text-yellow-400 transition-colors px-3 py-1.5 rounded-lg hover:bg-slate-800/50 flex items-center gap-1.5"
                 >
-                  <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                   </svg>
                   <span>Dashboard</span>
+                </Link>
+
+                <Link
+                  to="/profile"
+                  className="text-xs font-semibold text-slate-300 hover:text-yellow-400 transition-colors px-3 py-1.5 rounded-lg hover:bg-slate-800/50 flex items-center gap-1.5"
+                >
+                  <svg className="w-3.5 h-3.5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <span>Profile</span>
                 </Link>
 
                 <div className="h-4 w-px bg-slate-800" />
 
                 {/* User Info Pill */}
                 <div className="flex items-center gap-2 bg-slate-900/80 border border-slate-800 px-3 py-1 rounded-full text-xs text-slate-300">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
                   <span className="font-medium text-slate-200">{user?.name || user?.email || 'User'}</span>
                 </div>
 

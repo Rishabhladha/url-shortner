@@ -21,7 +21,16 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp",
   },
-});
+  // OTP fields for forgot password
+  otp: {
+    type: String,
+    select: false,
+  },
+  otpExpiry: {
+    type: Date,
+    select: false,
+  },
+}, { timestamps: true });
 
 userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
@@ -30,6 +39,8 @@ userSchema.methods.comparePassword = async function (password) {
 userSchema.set('toJSON', {
   transform: function (doc, ret) {
     delete ret.password;
+    delete ret.otp;
+    delete ret.otpExpiry;
     delete ret.__v;
     return ret;
   }

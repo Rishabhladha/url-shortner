@@ -20,7 +20,37 @@ export const getCurrentUser = async () =>{
     return data
 }
 
-export const getAllUserUrls = async () =>{
-    const {data} = await axiosInstance.post("/api/user/urls")
+export const getUserUrlsPaginated = async (page = 1, limit = 10) =>{
+    const {data} = await axiosInstance.get(`/api/user/urls/paginated?page=${page}&limit=${limit}`)
+    return data
+}
+
+export const deleteUrl = async (id) =>{
+    const {data} = await axiosInstance.delete(`/api/url/${id}`)
+    return data
+}
+
+export const updateProfile = async (name) =>{
+    const {data} = await axiosInstance.put("/api/user/profile", {name})
+    return data
+}
+
+export const changePassword = async (currentPassword, newPassword) =>{
+    const {data} = await axiosInstance.put("/api/user/change-password", {currentPassword, newPassword})
+    return data
+}
+
+export const deleteAccount = async () =>{
+    const {data} = await axiosInstance.delete("/api/user/account")
+    return data
+}
+
+export const sendForgotPasswordOtp = async (email) =>{
+    const {data} = await axiosInstance.post("/api/auth/forgot-password", {email})
+    return data
+}
+
+export const resetPassword = async (email, otp, newPassword) =>{
+    const {data} = await axiosInstance.post("/api/auth/reset-password", {email, otp, newPassword})
     return data
 }

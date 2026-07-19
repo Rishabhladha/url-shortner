@@ -1,22 +1,52 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getAllUserUrls } from '../api/user.api';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getUserUrlsPaginated, deleteUrl } from '../api/user.api';
 
 const LinkTable = () => {
-  const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['userUrls'],
-    queryFn: getAllUserUrls,
-    refetchInterval: 20000,
-    staleTime: 0,
-  });
-
+  const queryClient = useQueryClient();
   const [copiedId, setCopiedId] = useState(null);
   const [filter, setFilter] = useState('');
+  const [deletingId, setDeletingId] = useState(null);
+
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useInfiniteQuery({
+    queryKey: ['userUrlsPaginated'],
+    queryFn: ({ pageParam = 1 }) => getUserUrlsPaginated(pageParam, 10),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.page + 1 : undefined,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteUrl,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['userUrlsPaginated'] });
+      setDeletingId(null);
+    },
+    onError: (err) => {
+      console.error(err);
+      setDeletingId(null);
+      alert('Failed to delete URL');
+    }
+  });
 
   const copy = (text, id) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 1800);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this URL?")) {
+      setDeletingId(id);
+      deleteMutation.mutate(id);
+    }
   };
 
   if (isLoading) return (
@@ -32,13 +62,12 @@ const LinkTable = () => {
     </div>
   );
 
-  const urls = data?.urls || [];
-  const sorted = [...urls].reverse();
+  const urls = data?.pages.flatMap(page => page.urls) || [];
   const visible = filter
-    ? sorted.filter(u => u.full_url.toLowerCase().includes(filter.toLowerCase()) || u.short_url.toLowerCase().includes(filter.toLowerCase()))
-    : sorted;
+    ? urls.filter(u => u.full_url.toLowerCase().includes(filter.toLowerCase()) || u.short_url.toLowerCase().includes(filter.toLowerCase()))
+    : urls;
 
-  const totalClicks = urls.reduce((a, u) => a + (u.clicks || 0), 0);
+  const totalUrls = data?.pages[0]?.total || 0;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
@@ -47,16 +76,15 @@ const LinkTable = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, gap: 12, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <h2 style={{ fontSize: 16, fontWeight: 600, color: 'var(--text)' }}>Your links</h2>
-          <span className="pill">{urls.length}</span>
-          {totalClicks > 0 && <span className="pill pill-accent">{totalClicks} clicks</span>}
+          <span className="pill">{totalUrls}</span>
         </div>
-        {urls.length > 3 && (
+        {totalUrls > 0 && (
           <input
             type="text"
             value={filter}
             onChange={e => setFilter(e.target.value)}
-            placeholder="Filter…"
-            style={{ width: 180, padding: '7px 12px', fontSize: 13 }}
+            placeholder="Search URLs…"
+            style={{ width: 180, padding: '7px 12px', fontSize: 13, borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)' }}
           />
         )}
       </div>
@@ -74,11 +102,14 @@ const LinkTable = () => {
       {visible.map((item, idx) => {
         const shortFull = `http://localhost:3000/${item.short_url}`;
         const isCopied = copiedId === item._id;
+        const isDeleting = deletingId === item._id;
+        
         return (
           <div key={item._id} style={{
             display: 'flex', alignItems: 'center', gap: 12,
             padding: '12px 0',
             borderBottom: idx < visible.length - 1 ? '1px solid var(--border)' : 'none',
+            opacity: isDeleting ? 0.5 : 1
           }}>
             {/* Destination */}
             <div style={{ flex: 1, minWidth: 0 }}>
@@ -98,17 +129,41 @@ const LinkTable = () => {
               {item.clicks || 0} {item.clicks === 1 ? 'click' : 'clicks'}
             </span>
 
-            {/* Copy */}
-            <button
-              className="btn-ghost"
-              onClick={() => copy(shortFull, item._id)}
-              style={{ flexShrink: 0, fontSize: 13, padding: '5px 10px', color: isCopied ? 'var(--ok)' : 'var(--text-muted)' }}
-            >
-              {isCopied ? '✓ Copied' : 'Copy'}
-            </button>
+            {/* Actions */}
+            <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+              <button
+                className="btn-ghost"
+                onClick={() => copy(shortFull, item._id)}
+                style={{ fontSize: 13, padding: '5px 10px', color: isCopied ? 'var(--ok)' : 'var(--text-muted)' }}
+              >
+                {isCopied ? '✓ Copied' : 'Copy'}
+              </button>
+              <button
+                className="btn-ghost"
+                onClick={() => handleDelete(item._id)}
+                disabled={isDeleting}
+                style={{ fontSize: 13, padding: '5px 10px', color: 'var(--error)' }}
+              >
+                {isDeleting ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
           </div>
         );
       })}
+
+      {/* Infinite Scroll / Load More */}
+      {hasNextPage && !filter && (
+        <div style={{ textAlign: 'center', marginTop: 20 }}>
+          <button
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+            className="btn-ghost"
+            style={{ padding: '8px 16px', fontSize: 13 }}
+          >
+            {isFetchingNextPage ? 'Loading more...' : 'Load More'}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -3,8 +3,10 @@ import { loginUser } from '../api/user.api';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/slice/authSlice';
 import { useNavigate } from '@tanstack/react-router';
+import ForgotPasswordModal from './ForgotPasswordModal';
 
 const LoginForm = ({ onSwitch }) => {
+  const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
@@ -27,6 +29,7 @@ const LoginForm = ({ onSwitch }) => {
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {error && (
         <div style={{ padding: '10px 14px', background: 'rgba(192, 82, 75, 0.08)', border: '1px solid rgba(192,82,75,0.25)', borderRadius: 8, fontSize: 13, color: 'var(--error)' }}>
@@ -40,7 +43,16 @@ const LoginForm = ({ onSwitch }) => {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-        <label style={{ fontSize: 13, color: 'var(--text-dim)' }}>Password</label>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <label style={{ fontSize: 13, color: 'var(--text-dim)' }}>Password</label>
+          <button 
+            type="button" 
+            onClick={() => setIsForgotModalOpen(true)}
+            style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: 12, cursor: 'pointer' }}
+          >
+            Forgot password?
+          </button>
+        </div>
         <div style={{ position: 'relative' }}>
           <input type={show ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" required style={{ paddingRight: 60 }} autoComplete="current-password" />
           <button type="button" onClick={() => setShow(!show)} style={{
@@ -64,6 +76,12 @@ const LoginForm = ({ onSwitch }) => {
         </button>
       </p>
     </form>
+
+      <ForgotPasswordModal 
+        isOpen={isForgotModalOpen} 
+        onClose={() => setIsForgotModalOpen(false)} 
+      />
+    </>
   );
 };
 
