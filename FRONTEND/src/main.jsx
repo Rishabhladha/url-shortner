@@ -21,4 +21,4 @@ createRoot(document.getElementById('root')).render(
       <RouterProvider router={router} />
     </QueryClientProvider>
   </Provider>
-)
+)// Trigger Vercel rebuild after setting root directory to FRONTEND
