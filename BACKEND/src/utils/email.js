@@ -14,28 +14,24 @@ export const sendOtpEmail = async (to, otp) => {
     to,
     subject: "🔑 Your SnapURL Password Reset OTP",
     html: `
-      <div style="font-family: 'Inter', Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #0C0C0C; color: #E8E8E8; border-radius: 12px; overflow: hidden; border: 1px solid #2a2a2a;">
-        <div style="background: linear-gradient(135deg, #C9932A, #e6b84a); padding: 28px 32px; text-align: center;">
-          <h1 style="margin: 0; color: #0C0C0C; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">⚡ SnapURL</h1>
-          <p style="margin: 4px 0 0; color: rgba(0,0,0,0.6); font-size: 13px;">Password Reset Request</p>
-        </div>
-        <div style="padding: 32px;">
-          <p style="margin: 0 0 20px; font-size: 15px; color: #c0c0c0;">
-            You requested a password reset. Use the OTP below to continue:
-          </p>
-          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 24px; text-align: center; margin: 0 0 24px;">
-            <p style="margin: 0 0 8px; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Your OTP</p>
-            <p style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: 12px; color: #C9932A; font-family: monospace;">${otp}</p>
+      <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f0f4f8; padding: 40px 20px; color: #333333;">
+        <div style="max-width: 500px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div style="background-color: #2563eb; padding: 24px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 1px;">SnapURL</h1>
           </div>
-          <p style="margin: 0 0 8px; font-size: 13px; color: #888;">
-            ⏰ This OTP expires in <strong style="color: #c0c0c0;">10 minutes</strong>.
-          </p>
-          <p style="margin: 0; font-size: 13px; color: #888;">
-            If you didn't request this, you can safely ignore this email.
-          </p>
-        </div>
-        <div style="padding: 16px 32px; border-top: 1px solid #222; text-align: center;">
-          <p style="margin: 0; font-size: 11px; color: #555;">© ${new Date().getFullYear()} SnapURL — Fast, simple link shortening</p>
+          <div style="padding: 32px;">
+            <h2 style="font-size: 18px; color: #1e293b; margin-top: 0; margin-bottom: 16px;">Password Reset</h2>
+            <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.5;">You requested a password reset for your account. Please use the verification code below to continue:</p>
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 20px; text-align: center; margin-bottom: 24px;">
+              <span style="display: block; font-size: 12px; color: #3b82f6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: bold;">Verification Code</span>
+              <span style="font-size: 36px; font-weight: bold; letter-spacing: 6px; color: #1e3a8a; font-family: monospace;">${otp}</span>
+            </div>
+            <p style="font-size: 14px; color: #64748b; margin-bottom: 8px;">⏰ This code will expire in <strong>10 minutes</strong>.</p>
+            <p style="font-size: 14px; color: #64748b; margin-bottom: 0;">If you did not request this, you can safely ignore this email.</p>
+          </div>
+          <div style="background-color: #f8fafc; padding: 16px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
+            <p style="font-size: 12px; color: #94a3b8; margin: 0;">© ${new Date().getFullYear()} SnapURL. All rights reserved.</p>
+          </div>
         </div>
       </div>
     `,

@@ -120,7 +120,7 @@ const ProfilePage = () => {
             <img src={user?.avatar} alt="Avatar" style={{ width: 64, height: 64, borderRadius: '50%' }} />
             <div>
               <p style={{ fontSize: 14, fontWeight: 500, color: 'var(--text)' }}>{user?.email}</p>
-              <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Joined {new Date(user?.createdAt).toLocaleDateString()}</p>
+              <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Joined {new Date(user?.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })}</p>
             </div>
           </div>
 
@@ -195,9 +195,9 @@ const ProfilePage = () => {
       )}
 
       {activeTab === 'danger' && (
-        <div style={{ padding: 24, border: '1px solid var(--error)', borderRadius: 12, background: 'rgba(239, 68, 68, 0.05)' }}>
-          <h3 style={{ fontSize: 16, fontWeight: 600, color: 'var(--error)', marginBottom: 8 }}>Delete Account</h3>
-          <p style={{ fontSize: 14, color: 'var(--text-dim)', marginBottom: 20 }}>
+        <div style={{ padding: 24, border: '2px solid #b91c1c', borderRadius: 8, background: 'rgba(185, 28, 28, 0.05)' }}>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#b91c1c', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px' }}>⚠️ Danger Zone</h3>
+          <p style={{ fontSize: 14, color: 'var(--text)', marginBottom: 20, fontWeight: 500 }}>
             Once you delete your account, there is no going back. Please be certain.
             All your shortened URLs and analytics will be permanently deleted.
           </p>
@@ -205,13 +205,15 @@ const ProfilePage = () => {
             onClick={handleDeleteAccount}
             disabled={deleteLoading}
             style={{
-              padding: '10px 16px',
-              borderRadius: 8,
-              background: 'var(--error)',
+              padding: '12px 20px',
+              borderRadius: 6,
+              background: '#b91c1c',
               color: 'white',
               border: 'none',
-              fontWeight: 500,
-              cursor: 'pointer'
+              fontWeight: 700,
+              fontSize: 14,
+              cursor: 'pointer',
+              textTransform: 'uppercase'
             }}
           >
             {deleteLoading ? 'Deleting...' : 'Delete My Account'}

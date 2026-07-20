@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useLocation, useNavigate } from '@tanstack/react-router';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 
 const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isLogin = location.hash !== 'register';
+
+  const setHash = (newHash) => {
+    navigate({ hash: newHash, replace: true });
+  };
 
   return (
     <div style={{
@@ -41,7 +48,7 @@ const AuthPage = () => {
               const active = isLogin ? i === 0 : i === 1;
               return (
                 <button key={label} type="button"
-                  onClick={() => setIsLogin(i === 0)}
+                  onClick={() => setHash(i === 0 ? 'login' : 'register')}
                   style={{
                     flex: 1, padding: '7px 0', borderRadius: 6, border: 'none',
                     background: active ? 'var(--surface-hover)' : 'transparent',
@@ -58,8 +65,8 @@ const AuthPage = () => {
           </div>
 
           {isLogin
-            ? <LoginForm onSwitch={() => setIsLogin(false)} />
-            : <RegisterForm onSwitch={() => setIsLogin(true)} />
+            ? <LoginForm onSwitch={() => setHash('register')} />
+            : <RegisterForm onSwitch={() => setHash('login')} />
           }
         </div>
 
