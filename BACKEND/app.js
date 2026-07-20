@@ -18,10 +18,22 @@ import analytics_routes from "./src/routes/analytics.routes.js";
 const app = express();
 app.set('trust proxy', true); // Trust the proxy for IP resolution
 
-const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
+const allowedOrigins = [
+    'http://localhost:5173',
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: allowedOrigin, // your React app
-    credentials: true // 👈 this allows cookies to be sent
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        const isAllowed = allowedOrigins.includes(origin) || origin.endsWith('.vercel.app');
+        if (isAllowed) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
 }));
 
 app.use(express.json())
