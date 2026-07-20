@@ -54,3 +54,8 @@ export const resetPassword = async (email, otp, newPassword) =>{
     const {data} = await axiosInstance.post("/api/auth/reset-password", {email, otp, newPassword})
     return data
 }
+
+export const getAnalytics = async (id) =>{
+    const {data} = await axiosInstance.get(`/api/analytics/${id}`)
+    return data
+}

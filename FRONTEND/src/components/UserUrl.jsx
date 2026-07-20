@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getUserUrlsPaginated, deleteUrl } from '../api/user.api';
+import AnalyticsModal from './AnalyticsModal';
 
 const LinkTable = () => {
   const queryClient = useQueryClient();
   const [copiedId, setCopiedId] = useState(null);
   const [filter, setFilter] = useState('');
   const [deletingId, setDeletingId] = useState(null);
+  const [analyticsUrl, setAnalyticsUrl] = useState(null);
 
   const {
     data,
@@ -133,6 +135,13 @@ const LinkTable = () => {
             <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
               <button
                 className="btn-ghost"
+                onClick={() => setAnalyticsUrl(item)}
+                style={{ fontSize: 13, padding: '5px 10px', color: 'var(--accent)' }}
+              >
+                📊 Analytics
+              </button>
+              <button
+                className="btn-ghost"
                 onClick={() => copy(shortFull, item._id)}
                 style={{ fontSize: 13, padding: '5px 10px', color: isCopied ? 'var(--ok)' : 'var(--text-muted)' }}
               >
@@ -164,6 +173,13 @@ const LinkTable = () => {
           </button>
         </div>
       )}
+
+      {/* Analytics Modal */}
+      <AnalyticsModal 
+        isOpen={!!analyticsUrl} 
+        onClose={() => setAnalyticsUrl(null)} 
+        url={analyticsUrl} 
+      />
     </div>
   );
 };

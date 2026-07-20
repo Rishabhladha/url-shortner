@@ -13,7 +13,10 @@ import cors from "cors";
 import { attachUser } from "./src/utils/attachUser.js";
 import cookieParser from "cookie-parser";
 
+import analytics_routes from "./src/routes/analytics.routes.js";
+
 const app = express();
+app.set('trust proxy', true); // Trust the proxy for IP resolution
 
 app.use(cors({
     origin: 'http://localhost:5173', // your React app
@@ -30,6 +33,7 @@ app.use("/api/user",user_routes)
 app.use("/api/auth",auth_routes)
 app.use("/api/create",short_url)
 app.use("/api/url",url_routes)
+app.use("/api/analytics", analytics_routes)
 app.get("/:id",redirectFromShortUrl)
 
 app.use(errorHandler)
