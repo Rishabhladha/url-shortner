@@ -18,8 +18,9 @@ import analytics_routes from "./src/routes/analytics.routes.js";
 const app = express();
 app.set('trust proxy', true); // Trust the proxy for IP resolution
 
+const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 app.use(cors({
-    origin: 'http://localhost:5173', // your React app
+    origin: allowedOrigin, // your React app
     credentials: true // 👈 this allows cookies to be sent
 }));
 
@@ -38,9 +39,10 @@ app.get("/:id",redirectFromShortUrl)
 
 app.use(errorHandler)
 
-app.listen(3000,()=>{
+const PORT = process.env.PORT || 3000;
+app.listen(PORT,()=>{
     connectDB()
-    console.log("Server is running on http://localhost:3000");
+    console.log(`Server is running on port ${PORT}`);
 })
 
 // GET - Redirection 

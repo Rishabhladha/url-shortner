@@ -82,7 +82,8 @@ const UrlTable = () => {
             </thead>
             <tbody>
               {visible.map((item) => {
-                const shortFull = `http://localhost:3000/${item.short_url}`;
+                const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+                const shortFull = `${backendUrl}/${item.short_url}`;
                 return (
                   <tr key={item._id}>
                     <td>

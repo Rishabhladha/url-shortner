@@ -102,7 +102,8 @@ const LinkTable = () => {
 
       {/* Link rows */}
       {visible.map((item, idx) => {
-        const shortFull = `http://localhost:3000/${item.short_url}`;
+        const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+        const shortFull = `${backendUrl}/${item.short_url}`;
         const isCopied = copiedId === item._id;
         const isDeleting = deletingId === item._id;
         
