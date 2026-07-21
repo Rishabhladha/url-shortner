@@ -76,17 +76,17 @@ const RootLayout = () => {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
 
-        {/* Logo */}
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-          <img src="/logo.png" alt="SnapURL" style={{ width: 26, height: 26, borderRadius: 6, objectFit: 'cover' }} />
-          <span style={{ fontWeight: 700, fontSize: 15, letterSpacing: '-0.02em' }}>
-            Snap<span style={{ color: 'var(--accent)' }}>URL</span>
-          </span>
-        </Link>
+        {/* ── Left: Logo + Nav links ── */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          {/* Logo */}
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', marginRight: 16 }}>
+            <img src="/logo.png" alt="SnapURL" style={{ width: 26, height: 26, borderRadius: 6, objectFit: 'cover' }} />
+            <span style={{ fontWeight: 700, fontSize: 15, letterSpacing: '-0.02em' }}>
+              Snap<span style={{ color: 'var(--accent)' }}>URL</span>
+            </span>
+          </Link>
 
-        {/* Right side */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          {isAuthenticated ? (
+          {isAuthenticated && (
             <>
               {/* Dashboard */}
               <NavLink to="/dashboard" icon={
@@ -107,8 +107,15 @@ const RootLayout = () => {
               }>
                 Analytics
               </NavLink>
+            </>
+          )}
+        </div>
 
-              <div style={{ width: 1, height: 16, background: 'var(--border)', margin: '0 4px' }} />
+        {/* ── Right: Auth / User dropdown ── */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          {isAuthenticated ? (
+            <>
+              <div style={{ width: 1, height: 16, background: 'var(--border)', marginRight: 4 }} />
 
               {/* User dropdown */}
               <div ref={dropdownRef} style={{ position: 'relative' }}>
