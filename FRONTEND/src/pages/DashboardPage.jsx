@@ -116,7 +116,6 @@ const LinksList = ({ urls, totalUrls, hasNextPage, isFetchingNextPage, fetchNext
   const queryClient = useQueryClient();
   const [copiedId, setCopiedId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
-  const [analyticsUrl, setAnalyticsUrl] = useState(null);
 
   const deleteMutation = useMutation({
     mutationFn: deleteUrl,
@@ -215,9 +214,9 @@ const LinksList = ({ urls, totalUrls, hasNextPage, isFetchingNextPage, fetchNext
               <div style={{
                 flexShrink: 0, textAlign: 'center',
                 padding: '4px 10px', borderRadius: 6,
-                background: (item.clicks || 0) > 0 ? 'rgba(233,168,76,0.08)' : 'transparent',
+                background: (item.clicks || 0) > 0 ? 'rgba(124,110,247,0.1)' : 'transparent',
                 border: '1px solid',
-                borderColor: (item.clicks || 0) > 0 ? 'rgba(233,168,76,0.2)' : 'var(--border)',
+                borderColor: (item.clicks || 0) > 0 ? 'rgba(124,110,247,0.25)' : 'var(--border)',
               }}>
                 <p style={{ fontSize: 14, fontWeight: 600, color: (item.clicks || 0) > 0 ? 'var(--accent)' : 'var(--text-muted)', margin: 0, letterSpacing: '-0.01em' }}>
                   {item.clicks || 0}
@@ -228,35 +227,19 @@ const LinksList = ({ urls, totalUrls, hasNextPage, isFetchingNextPage, fetchNext
               {/* Actions */}
               <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
                 <button
-                  onClick={() => setAnalyticsUrl(item)}
-                  title="Analytics"
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 5,
-                    padding: '6px 10px', borderRadius: 6, border: '1px solid transparent',
-                    background: 'transparent', color: 'var(--text-muted)',
-                    cursor: 'pointer', fontSize: 12, fontFamily: 'inherit',
-                    transition: 'all 0.12s',
-                  }}
-                  onMouseOver={e => { e.currentTarget.style.background = 'rgba(107,138,255,0.1)'; e.currentTarget.style.color = '#6B8AFF'; e.currentTarget.style.borderColor = 'rgba(107,138,255,0.2)'; }}
-                  onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.borderColor = 'transparent'; }}
-                >
-                  <IconBar /> Analytics
-                </button>
-
-                <button
                   onClick={() => copy(shortFull, item._id)}
                   title="Copy"
                   style={{
                     display: 'flex', alignItems: 'center', gap: 5,
                     padding: '6px 10px', borderRadius: 6, border: '1px solid transparent',
-                    background: isCopied ? 'rgba(74,153,96,0.1)' : 'transparent',
+                    background: isCopied ? 'rgba(52,201,123,0.1)' : 'transparent',
                     color: isCopied ? 'var(--ok)' : 'var(--text-muted)',
-                    borderColor: isCopied ? 'rgba(74,153,96,0.2)' : 'transparent',
+                    borderColor: isCopied ? 'rgba(52,201,123,0.25)' : 'transparent',
                     cursor: 'pointer', fontSize: 12, fontFamily: 'inherit',
                     transition: 'all 0.12s',
                   }}
                   onMouseOver={e => { if (!isCopied) { e.currentTarget.style.background = 'var(--surface-hover)'; e.currentTarget.style.color = 'var(--text)'; }}}
-                  onMouseOut={e => { if (!isCopied) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted)'; }}}
+                  onMouseOut={e => { if (!isCopied) { e.currentTarget.style.background = isCopied ? 'rgba(52,201,123,0.1)' : 'transparent'; e.currentTarget.style.color = isCopied ? 'var(--ok)' : 'var(--text-muted)'; }}}
                 >
                   {isCopied ? <IconCheck /> : <IconCopy />}
                   {isCopied ? 'Copied' : 'Copy'}
@@ -273,7 +256,7 @@ const LinksList = ({ urls, totalUrls, hasNextPage, isFetchingNextPage, fetchNext
                     cursor: isDeleting ? 'not-allowed' : 'pointer', fontSize: 12, fontFamily: 'inherit',
                     transition: 'all 0.12s',
                   }}
-                  onMouseOver={e => { e.currentTarget.style.background = 'rgba(192,82,75,0.1)'; e.currentTarget.style.color = 'var(--error)'; e.currentTarget.style.borderColor = 'rgba(192,82,75,0.2)'; }}
+                  onMouseOver={e => { e.currentTarget.style.background = 'rgba(240,96,96,0.1)'; e.currentTarget.style.color = 'var(--error)'; e.currentTarget.style.borderColor = 'rgba(240,96,96,0.2)'; }}
                   onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.borderColor = 'transparent'; }}
                 >
                   <IconTrash />
@@ -305,11 +288,6 @@ const LinksList = ({ urls, totalUrls, hasNextPage, isFetchingNextPage, fetchNext
         </div>
       )}
 
-      <AnalyticsModal
-        isOpen={!!analyticsUrl}
-        onClose={() => setAnalyticsUrl(null)}
-        url={analyticsUrl}
-      />
     </>
   );
 };
