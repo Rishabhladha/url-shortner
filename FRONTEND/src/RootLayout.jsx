@@ -30,10 +30,10 @@ const RootLayout = () => {
     navigate({ to: '/' });
   };
 
-  // nav link active state
+  // nav link active state — currentSearch is a parsed object {tab:'analytics'}, NOT a string
   const isActive = (path, search) => {
-    if (search) return currentPath === path && currentSearch.includes(search);
-    return currentPath === path && !currentSearch.includes('tab=analytics');
+    if (search) return currentPath === path && currentSearch?.tab === 'analytics';
+    return currentPath === path && currentSearch?.tab !== 'analytics';
   };
 
   const NavLink = ({ to, search, children, icon }) => {
