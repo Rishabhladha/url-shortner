@@ -1,38 +1,30 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 
-export const sendOtpEmail = async (to, otp) => {
-  // PRODUCTION: Use the Vercel Bridge to bypass Render's SMTP block
-  if (process.env.NODE_ENV === 'production') {
-    const vercelUrl = process.env.FRONTEND_URL;
-    if (!vercelUrl) {
-      throw new Error("FRONTEND_URL must be set in Render environment variables");
-    }
-
-    const response = await fetch(`${vercelUrl}/api/sendEmail`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: to, otp })
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(`Vercel Bridge failed: ${error.error || error.message}`);
-    }
-    return;
+export default async function handler(req, res) {
+  // 1. Only allow POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  // DEVELOPMENT: Use Nodemailer directly on localhost
+  const { email, otp } = req.body;
+  if (!email || !otp) {
+    return res.status(400).json({ error: 'Email and OTP are required' });
+  }
+
+  // 2. Connect to Gmail SMTP (Vercel allows port 465)
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      pass: process.env.EMAIL_PASS, // This must be a Gmail App Password
     },
   });
 
   const mailOptions = {
-    from: process.env.EMAIL_FROM || `"SnapURL" <${process.env.EMAIL_USER}>`,
-    to,
+    from: `"SnapURL" <${process.env.EMAIL_USER}>`,
+    to: email,
     subject: "🔑 Your SnapURL Password Reset OTP",
     html: `
       <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f0f4f8; padding: 40px 20px; color: #333333;">
@@ -58,6 +50,11 @@ export const sendOtpEmail = async (to, otp) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
-};
-
+  try {
+    await transporter.sendMail(mailOptions);
+    return res.status(200).json({ success: true, message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('SMTP Error:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+}
