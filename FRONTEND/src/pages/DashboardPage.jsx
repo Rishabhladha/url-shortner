@@ -214,11 +214,10 @@ const LinksList = ({ urls, totalUrls, hasNextPage, isFetchingNextPage, fetchNext
               <div style={{
                 flexShrink: 0, textAlign: 'center',
                 padding: '4px 10px', borderRadius: 6,
-                background: (item.clicks || 0) > 0 ? 'rgba(233,168,76,0.1)' : 'transparent',
-                border: '1px solid',
-                borderColor: (item.clicks || 0) > 0 ? 'rgba(233,168,76,0.25)' : 'var(--border)',
+                background: 'transparent',
+                border: '1px solid var(--border)',
               }}>
-                <p style={{ fontSize: 14, fontWeight: 600, color: (item.clicks || 0) > 0 ? 'var(--accent)' : 'var(--text-muted)', margin: 0, letterSpacing: '-0.01em' }}>
+                <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-muted)', margin: 0, letterSpacing: '-0.01em' }}>
                   {item.clicks || 0}
                 </p>
                 <p style={{ fontSize: 9, color: 'var(--text-muted)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>clicks</p>
