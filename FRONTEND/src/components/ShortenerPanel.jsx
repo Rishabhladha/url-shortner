@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { queryClient } from '../main';
 
 const PLACEHOLDER = 'https://example.com/very/long/path/that/nobody-wants-to-type';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 const ShortenerPanel = () => {
   const [url, setUrl] = useState('');
@@ -82,7 +83,7 @@ const ShortenerPanel = () => {
           </label>
           <div style={{ display: 'flex', alignItems: 'center', background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, overflow: 'hidden' }}>
             <span className="type-mono" style={{ padding: '7px 10px', color: 'var(--text-dim)', borderRight: '1px solid var(--border)', flexShrink: 0, fontSize: 12 }}>
-              localhost:3000/
+              {BACKEND_URL.replace(/^https?:\/\//, '')}/
             </span>
             <input
               type="text"

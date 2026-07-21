@@ -13,7 +13,9 @@ export const createShortUrl = wrapAsync(async (req,res)=>{
     }else{  
         shortUrl = await createShortUrlWithoutUser(data.url)
     }
-    res.status(200).json({shortUrl : process.env.APP_URL + shortUrl})
+    // Return the short code only — the frontend composes the full URL using VITE_BACKEND_URL
+    // This avoids broken links when APP_URL env var is not set correctly on the hosting provider
+    res.status(200).json({shortUrl : shortUrl})
 })
 
 

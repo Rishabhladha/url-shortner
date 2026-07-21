@@ -3,6 +3,8 @@ import { createShortUrl } from '../api/shortUrl.api';
 import { useSelector } from 'react-redux';
 import { queryClient } from '../main';
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 const UrlShortener = () => {
   const [url, setUrl] = useState('');
   const [slug, setSlug] = useState('');
@@ -84,7 +86,7 @@ const UrlShortener = () => {
           {isAuthenticated && (
             <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 0, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
               <span style={{ padding: '9px 12px 9px 14px', color: 'var(--text-muted)', fontSize: 13, borderRight: '1px solid var(--border)', flexShrink: 0, whiteSpace: 'nowrap' }}>
-                localhost:3000/
+                {BACKEND_URL.replace(/^https?:\/\//, '')}/
               </span>
               <input
                 type="text"
