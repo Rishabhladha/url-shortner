@@ -42,6 +42,7 @@ const RootLayout = () => {
       <Link
         to={to}
         search={search ? { tab: 'analytics' } : undefined}
+        replace={currentPath === to}
         style={{
           display: 'inline-flex', alignItems: 'center', gap: 5,
           fontSize: 13, fontWeight: active ? 500 : 400,

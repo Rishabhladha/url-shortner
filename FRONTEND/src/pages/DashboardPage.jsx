@@ -325,7 +325,7 @@ const DashboardPage = () => {
   const firstName = user?.name?.split(' ')[0] || null;
 
   const setTab = (tab) => {
-    navigate({ to: '/dashboard', search: tab === 'analytics' ? { tab: 'analytics' } : {} });
+    navigate({ to: '/dashboard', search: tab === 'analytics' ? { tab: 'analytics' } : {}, replace: true });
   };
 
   return (
